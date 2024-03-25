@@ -50,7 +50,7 @@ resource "azurerm_local_network_gateway" "tunnel1" {
   resource_group_name = var.az_rg_name
   location            = var.az_location
   gateway_address     = aws_vpn_connection.main.tunnel1_address ## Get this address from the first aws tunnel when created
-  address_space       = ["172.0.0.0/16"] ## cidr of the aws vpc
+  address_space       = [var.vpc_cidr_block] ## cidr of the aws vpc
 }
 
 
@@ -72,7 +72,7 @@ resource "azurerm_local_network_gateway" "tunnel2" {
   resource_group_name = var.az_rg_name
   location            = var.az_location
   gateway_address     = aws_vpn_connection.main.tunnel2_address ## Get this address from the second aws tunnel when created
-  address_space       = ["172.0.0.0/16"] ## cidr of the aws vpc
+  address_space       = [var.vpc_cidr_block] ## cidr of the aws vpc
 }
 
 

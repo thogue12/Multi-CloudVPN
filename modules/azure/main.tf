@@ -50,6 +50,8 @@ resource "azurerm_public_ip" "linux_public_ip1" {
   allocation_method   = "Static"
   sku                 = "Standard"
 
+  depends_on = [ azurerm_resource_group.resource_group ]
+
 }
 
 
@@ -98,6 +100,8 @@ resource "azurerm_network_security_group" "network_sg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  depends_on = [ azurerm_resource_group.resource_group ]
 }
 
 

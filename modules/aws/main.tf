@@ -1,12 +1,12 @@
 
-
 #create a vpc
-
-resource "aws_vpc" "vpn_vpc" {
+resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
+  enable_dns_hostnames = true
+  enable_dns_support = true
 
   tags = {
-    Name = var.vpc_name
+    Name = "${var.vpc_name}-vpn"
   }
 }
 
@@ -14,32 +14,32 @@ resource "aws_vpc" "vpn_vpc" {
 
 resource "aws_subnet" "gateway_subnet" {
   cidr_block              = var.gw_sub_cidr
-  vpc_id                  = aws_vpc.vpn_vpc.id
+  vpc_id                  = aws_vpc.main.id
   map_public_ip_on_launch = true
   availability_zone       = "us-east-1a"
 
   tags = {
     Name = "Gateway Subnet"
   }
-  depends_on = [aws_vpc.vpn_vpc]
+  depends_on = [aws_vpc.main]
 }
 
 resource "aws_subnet" "public_subnet1" {
   cidr_block              = var.pub_sub1_cidr
-  vpc_id                  = aws_vpc.vpn_vpc.id
+  vpc_id                  = aws_vpc.main.id
   map_public_ip_on_launch = true
   availability_zone       = "us-east-1a"
 
    tags = {
     Name = "Public Subnet1"
   }
-  depends_on = [aws_vpc.vpn_vpc]
+  depends_on = [aws_vpc.main]
 }
 
 #internet gateway
 
 resource "aws_internet_gateway" "example_igw" {
-  vpc_id = aws_vpc.vpn_vpc.id
+  vpc_id = aws_vpc.main.id
 
   tags = {
     Name = "vpn-vpc-internet-gateway"
@@ -55,7 +55,7 @@ resource "aws_internet_gateway" "example_igw" {
 
 
 resource "aws_route_table" "example_pub_rt" { 
-  vpc_id = aws_vpc.vpn_vpc.id
+  vpc_id = aws_vpc.main.id
 
   route {
 
@@ -68,14 +68,6 @@ resource "aws_route_table" "example_pub_rt" {
 }
 
 
-resource "aws_route" "vpn_route" {
-  route_table_id            = aws_route_table.example_pub_rt.id
-  destination_cidr_block    = "10.0.0.0/16" # CIDR block of the gateway subnet in azure
-  gateway_id                = var.vpn_gateway_id
-  
-}
-
-
 # #route table association1
 resource "aws_route_table_association" "example_rt_asso1" {
   subnet_id      = aws_subnet.public_subnet1.id
@@ -84,7 +76,7 @@ resource "aws_route_table_association" "example_rt_asso1" {
 
 
 
-#route table association4
+#route table association2
 resource "aws_route_table_association" "example_rt_asso2" {
   subnet_id      = aws_subnet.gateway_subnet.id
   route_table_id = aws_route_table.example_pub_rt.id
@@ -94,8 +86,8 @@ resource "aws_route_table_association" "example_rt_asso2" {
 resource "aws_security_group" "main_security_group" {
   name        = var.security_group_name
   description = "Allow TLS inbound traffic"
-  vpc_id      = aws_vpc.vpn_vpc.id
-  depends_on  = [aws_vpc.vpn_vpc]
+  vpc_id      = aws_vpc.main.id
+  depends_on  = [aws_vpc.main]
 
   ingress {
     description = "allow https"
