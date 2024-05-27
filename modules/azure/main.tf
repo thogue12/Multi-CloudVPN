@@ -3,7 +3,7 @@
 # Create a resource group
 resource "azurerm_resource_group" "resource_group" {
   name     = var.rg_name
-  location = var.location
+  location = var.rg_location
 }
 
 # Create a virtual network within the resource group
@@ -29,7 +29,7 @@ resource "azurerm_subnet" "pub_subnet1" {
 
 resource "azurerm_network_interface" "network_interface" {
   name                = var.vm_nic1_name
-  location            = var.location
+  location            = var.rg_location
   resource_group_name = var.rg_name
 
   ip_configuration {
@@ -45,7 +45,7 @@ resource "azurerm_network_interface" "network_interface" {
 #public ip for vm1
 resource "azurerm_public_ip" "linux_public_ip1" {
   name                = var.public_ip1
-  location            = var.location
+  location            = var.rg_location
   resource_group_name = var.rg_name
   allocation_method   = "Static"
   sku                 = "Standard"
@@ -61,7 +61,7 @@ resource "azurerm_public_ip" "linux_public_ip1" {
 #Network security group for VM1
 resource "azurerm_network_security_group" "network_sg" {
   name                = "allow_web"
-  location            = var.location
+  location            = var.rg_location
   resource_group_name = var.rg_name
 
   security_rule {
@@ -118,7 +118,7 @@ resource "azurerm_network_interface_security_group_association" "vm1_nsg_nic_ass
 resource "azurerm_linux_virtual_machine" "linux_vm1" {
   name                  = var.vm1_name
   resource_group_name   = var.rg_name 
-  location              = var.location
+  location              = var.rg_location
   size                  = "Standard_B2s"
   admin_username        = "vm"
   network_interface_ids = [azurerm_network_interface.network_interface.id]

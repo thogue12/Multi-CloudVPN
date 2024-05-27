@@ -15,7 +15,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "gateway_subnet" {
   cidr_block              = var.gw_sub_cidr
   vpc_id                  = aws_vpc.main.id
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
   availability_zone       = "us-east-1a"
 
   tags = {
@@ -66,7 +66,19 @@ resource "aws_route_table" "example_pub_rt" {
      Name = "vpn-public-route-table"
    }
 }
+##private route table
+resource "aws_route_table" "example_priv_rt" { 
+  vpc_id = aws_vpc.main.id
 
+  route {
+
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.example_igw.id
+   }
+   tags = {
+     Name = "vpn-public-route-table"
+   }
+}
 
 # #route table association1
 resource "aws_route_table_association" "example_rt_asso1" {
@@ -79,7 +91,7 @@ resource "aws_route_table_association" "example_rt_asso1" {
 #route table association2
 resource "aws_route_table_association" "example_rt_asso2" {
   subnet_id      = aws_subnet.gateway_subnet.id
-  route_table_id = aws_route_table.example_pub_rt.id
+  route_table_id = aws_route_table.example_priv_rt.id
 }
 
 #create security group and allow ssh and http, https traffic from anywhere

@@ -1,5 +1,5 @@
 variable "rg_name" {}
-variable "location" {}
+variable "rg_location" {}
 variable "vnet_name" {}
 variable "vnet_cidr" {}
 variable "subnet_name" {}

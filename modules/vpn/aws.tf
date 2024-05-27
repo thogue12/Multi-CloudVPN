@@ -14,10 +14,12 @@ resource "aws_vpn_gateway_attachment" "vpn_attachment" {
 }
 
 #### Create these resources after the inital apply to get the public IP address and to avoid crazy errors
+## Reps the on prem environement in this Azure
+
 
 resource "aws_customer_gateway" "customer_gateway" {
   bgp_asn    = 65000
-  ip_address = azurerm_public_ip.vpn_public_ip.ip_address ## public IP address of the azure vpn gateway.. get after it is built
+  ip_address = azurerm_public_ip.vpn_public_ip.ip_address ## public IP address of the azure vpn gateway.
   type       = "ipsec.1"
 
   tags = {
@@ -27,7 +29,7 @@ resource "aws_customer_gateway" "customer_gateway" {
   depends_on = [ azurerm_virtual_network_gateway.azure_vpn_gateway ]
 }
 
-
+## This defines the conf for establishing a VPN connection between AWS gateway and customer gateway device
 resource "aws_vpn_connection" "main" {
   vpn_gateway_id      = aws_vpn_gateway.main.id
   customer_gateway_id = aws_customer_gateway.customer_gateway.id
@@ -42,11 +44,11 @@ resource "aws_vpn_connection" "main" {
   }
 }
 
-## So far this resource was the main I was missing in there other instances of this project
-## I didn't have the vpn_connection_id option
+##  So far this resource was the main I was missing in there other instances of this project
+##  I didn't have the vpn_connection_id option
 
 resource "aws_vpn_connection_route" "azure" {
-  destination_cidr_block = element(var.az_vnet_cidr, 0) ## azure vnet cidr. use the element arg with the var, 0 to indicate only one to be specified
+  destination_cidr_block = element(var.vnet_cidr, 0) ## azure vnet cidr. use the element arg with the var, 0 to indicate only one to be specified
   
   vpn_connection_id      = aws_vpn_connection.main.id 
 }

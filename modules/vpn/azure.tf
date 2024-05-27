@@ -1,18 +1,18 @@
 
 resource "azurerm_subnet" "gateway_subnet" {
   name                 = var.gateway_subent
-  virtual_network_name = var.az_vnet_name
-  resource_group_name  = var.az_rg_name
+  virtual_network_name = var.vnet_name
+  resource_group_name  = var.resource_group_name
   address_prefixes     = var.gateway_sub_cidr
-
+depends_on = [ var.resource_group_name ]
 }
 
 #Create Public IP for the gateway
 
 resource "azurerm_public_ip" "vpn_public_ip" {
   name                = var.vpn_ip
-  location            = var.az_location
-  resource_group_name = var.az_rg_name
+  location            = var.rg_location
+  resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
 
@@ -22,8 +22,8 @@ resource "azurerm_public_ip" "vpn_public_ip" {
 
 resource "azurerm_virtual_network_gateway" "azure_vpn_gateway" {
   name                = var.az_vpn_name
-  location            = var.az_location
-  resource_group_name = var.az_rg_name
+  location            = var.rg_location
+  resource_group_name = var.resource_group_name
   type     = "Vpn"
   vpn_type = "RouteBased"
 
@@ -42,13 +42,12 @@ resource "azurerm_virtual_network_gateway" "azure_vpn_gateway" {
 
 
 
-#Create local network gateway, reps the sit or the on-prem network in this case AWS VPC
+#Create local network gateway, reps the sitee or the on-prem network in this case AWS VPC
 #### Create these resources after the inital apply to get the public IP address of the tunnels and to avoid crazy errors
-
 resource "azurerm_local_network_gateway" "tunnel1" {
   name                = var.local_ng_name
-  resource_group_name = var.az_rg_name
-  location            = var.az_location
+  resource_group_name = var.resource_group_name
+  location            = var.rg_location
   gateway_address     = aws_vpn_connection.main.tunnel1_address ## Get this address from the first aws tunnel when created
   address_space       = [var.vpc_cidr_block] ## cidr of the aws vpc
 }
@@ -56,8 +55,8 @@ resource "azurerm_local_network_gateway" "tunnel1" {
 
 resource "azurerm_virtual_network_gateway_connection" "onpremise" {
   name                = var.vnet_gateway_con_name
-  location            = var.az_location
-  resource_group_name = var.az_rg_name
+  location            = var.rg_location
+  resource_group_name = var.resource_group_name
   type                       = "IPsec"
   virtual_network_gateway_id = azurerm_virtual_network_gateway.azure_vpn_gateway.id
   local_network_gateway_id   = azurerm_local_network_gateway.tunnel1.id
@@ -65,12 +64,10 @@ resource "azurerm_virtual_network_gateway_connection" "onpremise" {
 }
 
 
-
-
 resource "azurerm_local_network_gateway" "tunnel2" {
   name                = var.local_ng_name2
-  resource_group_name = var.az_rg_name
-  location            = var.az_location
+  resource_group_name = var.resource_group_name
+  location            = var.rg_location
   gateway_address     = aws_vpn_connection.main.tunnel2_address ## Get this address from the second aws tunnel when created
   address_space       = [var.vpc_cidr_block] ## cidr of the aws vpc
 }
@@ -78,11 +75,11 @@ resource "azurerm_local_network_gateway" "tunnel2" {
 
 resource "azurerm_virtual_network_gateway_connection" "onpremise2" {
   name                = var.vnet_gateway_con_name2
-  location            = var.az_location
-  resource_group_name = var.az_rg_name
+  location            = var.rg_location
+  resource_group_name = var.resource_group_name
   type                       = "IPsec"
   virtual_network_gateway_id = azurerm_virtual_network_gateway.azure_vpn_gateway.id
   local_network_gateway_id   = azurerm_local_network_gateway.tunnel2.id
-  shared_key = var.preshared_key2   ## second pre shared key(where do I find these)
+  shared_key = var.preshared_key2   ## second pre shared key
 }
 

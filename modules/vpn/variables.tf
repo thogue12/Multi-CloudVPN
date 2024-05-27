@@ -2,7 +2,7 @@
 variable "vpc_id" {}
 variable "aws_route_table_id" {}
 variable "rg_name" {}
-variable "location" {}
+variable "rg_location" {}
 variable "vpc_cidr_block" {}
 
 ##AWS-VPN
@@ -21,17 +21,19 @@ variable "preshared_key2" {
 
 
 ##Azure-VPN
-
+variable "resource_group_name" {
+  description = "The name of the Resource Group"
+  type        = string
+}
 variable "gateway_subent" {}
-variable "az_vnet_name" {}
-variable "az_rg_name" {}
+variable "vnet_name" {}
+# variable "az_rg_name" {}
 variable "gateway_sub_cidr" {}
 variable "vpn_ip" {}
-variable "az_location" {}
 variable "az_vpn_name" {}
 variable "local_ng_name" {}
 variable "vnet_gateway_con_name" {}
 variable "local_ng_name2" {}
 variable "vnet_gateway_con_name2" {}
-variable "az_vnet_cidr" {}
+variable "vnet_cidr" {}
 

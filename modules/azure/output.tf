@@ -1,5 +1,5 @@
 output "rg_location" {
-    value = var.location
+    value = var.rg_location
 }
 
 output "rg_name" {
