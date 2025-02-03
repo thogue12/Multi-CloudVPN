@@ -4,6 +4,8 @@
 vpc_cidr            = "172.0.0.0/16"
 gw_sub_cidr         = "172.0.1.0/24"
 pub_sub1_cidr       = "172.0.2.0/24"
+priv_sub1_cidr      = "172.0.3.0/24"
+priv_sub2_cidr      = "172.0.4.0/24"
 vpc_name            = "tims-vpc"
 security_group_name = "allow-web"
 
@@ -36,3 +38,7 @@ local_ng_name2         = "aws-tunnel2"
 vnet_gateway_con_name2 = "connection2"
 
 
+### -------------- DB VARIABLES------------------###
+
+db-password = ""
+db-username = ""

@@ -10,6 +10,8 @@ module "aws" {
   security_group_name = var.security_group_name
   linux_ami           = var.linux_ami
   instance_type       = var.instance_type
+  priv_sub1_cidr      = var.priv_sub1_cidr
+  priv_sub2_cidr      = var.priv_sub2_cidr
 
 }
 
@@ -44,14 +46,22 @@ module "vpn" {
   vnet_gateway_con_name  = var.vnet_gateway_con_name
   vnet_gateway_con_name2 = var.vnet_gateway_con_name2
 
-  local_ng_name          = var.local_ng_name
-  local_ng_name2         = var.local_ng_name2
-  preshared_key1         = var.preshared_key1
-  preshared_key2         = var.preshared_key2
-  customer_gateway       = var.customer_gateway
-  vpc_id                 = module.aws.vpc_id
-  vpc_cidr_block         = module.aws.vpc_cidr_blockx
-  aws_route_table_id     = module.aws.public_route_table_id
-  vpn_name               = var.vpn_name
-  
+  local_ng_name      = var.local_ng_name
+  local_ng_name2     = var.local_ng_name2
+  preshared_key1     = var.preshared_key1
+  preshared_key2     = var.preshared_key2
+  customer_gateway   = var.customer_gateway
+  vpc_id             = module.aws.vpc_id
+  vpc_cidr_block     = module.aws.vpc_cidr_block
+  aws_route_table_id = module.aws.public_route_table_id
+  vpn_name           = var.vpn_name
+
+}
+module "database" {
+  source             = "./modules/database"
+  db-username        = var.db-username
+  db-password        = var.db-password
+  private_subnet_ids = module.aws.private_subnet_ids
+  vpc_id             = module.aws.vpc_id
+  vnet_cidr          = module.azure.vnet_cidr
 }
