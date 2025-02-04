@@ -44,5 +44,5 @@ vnet_gateway_con_name2 = "connection2"
 
 ### -------------- DB VARIABLES------------------###
 
-db-password = "KHfeiugeie3049!!"
-db-username = "thogue"
+db-password = ""
+db-username = ""
