@@ -12,21 +12,28 @@ module "aws" {
   instance_type       = var.instance_type
   priv_sub1_cidr      = var.priv_sub1_cidr
   priv_sub2_cidr      = var.priv_sub2_cidr
+  vpn_gateway_id      = module.vpn.vpn_gateway_id
+  vnet_cidr           = module.azure.vnet_cidr
 
 }
 
 module "azure" {
   source = "./modules/azure"
 
-  rg_name      = var.rg_name
-  vnet_name    = var.vnet_name
-  subnet_name  = var.subnet_name
-  rg_location  = var.rg_location
-  vnet_cidr    = var.vnet_cidr
-  sub1_cidr    = var.sub1_cidr
-  vm1_name     = var.vm1_name
-  vm_nic1_name = var.vm_nic1_name
-  public_ip1   = var.public_ip1
+  rg_name           = var.rg_name
+  vnet_name         = var.vnet_name
+  subnet1_name      = var.subnet1_name
+  rg_location       = var.rg_location
+  vnet_cidr         = var.vnet_cidr
+  sub1_cidr         = var.sub1_cidr
+  vm1_name          = var.vm1_name
+  vm_nic1_name      = var.vm_nic1_name
+  public_ip1        = var.public_ip1
+  sub2_cidr         = var.sub2_cidr
+  private_sub1_cidr = var.private_sub1_cidr
+  subnet2_name      = var.subnet2_name
+  priv_subnet1_name = var.priv_subnet1_name
+  vpc_cidr_block = module.aws.vpc_cidr_block
 
 }
 

@@ -4,7 +4,6 @@ resource "azurerm_subnet" "gateway_subnet" {
   virtual_network_name = var.vnet_name
   resource_group_name  = var.resource_group_name
   address_prefixes     = var.gateway_sub_cidr
-depends_on = [ var.resource_group_name ]
 }
 
 #Create Public IP for the gateway

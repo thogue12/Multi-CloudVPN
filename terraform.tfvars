@@ -21,11 +21,15 @@ preshared_key2   = "abcsdh1283024"
 
 vnet_cidr              = ["10.0.0.0/16"]
 sub1_cidr              = ["10.0.1.0/24"]
+sub2_cidr              = ["10.0.3.0/24"]
+private_sub1_cidr      = ["10.0.4.0/24"]
 gateway_sub_cidr       = ["10.0.2.0/24"]
 rg_name                = "tims-vpn-rg"
 rg_location            = "eastus"
 vnet_name              = "vpn-vnet"
-subnet_name            = "pub-sub"
+subnet1_name           = "pub-sub1"
+subnet2_name           = "pub-sub2"
+priv_subnet1_name      = "priv-sub1"
 vm_nic1_name           = "vm-nic"
 vm1_name               = "Linux-VM"
 public_ip1             = "publicIP"
@@ -40,5 +44,5 @@ vnet_gateway_con_name2 = "connection2"
 
 ### -------------- DB VARIABLES------------------###
 
-db-password = ""
-db-username = ""
+db-password = "KHfeiugeie3049!!"
+db-username = "thogue"
