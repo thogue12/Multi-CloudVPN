@@ -37,15 +37,18 @@ variable "preshared_key2" {
 
 
 #### Azure VARIABLES
-
 variable "vnet_cidr" {}
 variable "rg_location" {}
-variable "subnet_name" {}
+variable "subnet1_name" {}
 variable "sub1_cidr" {}
 variable "vm_nic1_name" {}
 variable "public_ip1" {}
 variable "vm1_name" {}
 variable "vnet_name" {}
+variable "subnet2_name" {}
+variable "priv_subnet1_name" {}
+variable "sub2_cidr" {}
+variable "private_sub1_cidr" {}
 
 ### AZURE VPN VARIABLES
 
@@ -57,4 +60,12 @@ variable "vnet_gateway_con_name" {}
 variable "local_ng_name2" {}
 variable "vnet_gateway_con_name2" {}
 
+###---------------DB Variables----------------------###
+
+variable "db-username" {
+  sensitive = true
+}
+variable "db-password" {
+  sensitive = true
+}
 
