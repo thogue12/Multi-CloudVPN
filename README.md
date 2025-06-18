@@ -38,6 +38,6 @@ The project demonstrates core platform engineering skills across **cloud network
 ## How to run 
 
 main.tf
-terraform init
-terraform plan
-terraform apply
+- terraform init
+- terraform plan
+- terraform apply
